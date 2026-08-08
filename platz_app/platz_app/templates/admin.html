@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLATZ - Admin Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Montserrat:wght@600;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --platz-yellow: #f8e110; --platz-black: #000000; --pure-white: #ffffff; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body { 
+            background-color: var(--platz-yellow); 
+            color: var(--platz-black); 
+            font-family: 'Montserrat', sans-serif; 
+            padding: 20px 10px; 
+        }
+
+        .admin-wrapper { 
+            max-width: 700px; 
+            margin: 0 auto; 
+        }
+
+        .admin-container { 
+            background: var(--pure-white); 
+            border: 4px solid var(--platz-black); 
+            box-shadow: 6px 6px 0px var(--platz-black); 
+            padding: 20px; 
+            margin-bottom: 30px; 
+        }
+
+        @media (min-width: 768px) {
+            body { padding: 40px; }
+            .admin-container { border: 6px solid var(--platz-black); box-shadow: 12px 12px 0px var(--platz-black); padding: 30px; }
+        }
+
+        h1, h2 { 
+            font-family: 'Oswald', sans-serif; 
+            text-transform: uppercase; 
+        }
+        h1 { font-size: 2rem; }
+        h2 { font-size: 1.6rem; margin-bottom: 15px; }
+        @media (min-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+        }
+
+        .top-bar { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 25px; 
+            border-bottom: 3px solid var(--platz-black);
+            padding-bottom: 15px;
+        }
+
+        .top-bar a {
+            background: var(--platz-black);
+            color: var(--platz-yellow);
+            padding: 6px 12px;
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            border: 2px solid var(--platz-black);
+            text-decoration: none;
+        }
+        .top-bar a:hover {
+            background: var(--platz-yellow);
+            color: var(--platz-black);
+        }
+
+        .form-group { 
+            margin-bottom: 15px; 
+            display: flex; 
+            flex-direction: column; 
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        @media (min-width: 600px) {
+            .form-row { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        label { 
+            font-weight: 900; 
+            margin-bottom: 5px; 
+            text-transform: uppercase; 
+            font-size: 0.85rem; 
+        }
+
+        input, textarea, button { 
+            padding: 10px 12px; 
+            border: 3px solid var(--platz-black); 
+            font-family: 'Montserrat', sans-serif; 
+            font-weight: 600; 
+            font-size: 1rem;
+        }
+        input, textarea { background: #f9f9f9; }
+        textarea { resize: vertical; height: 100px; }
+
+        button[type="submit"] { 
+            background: var(--platz-black); 
+            color: var(--platz-yellow); 
+            font-family: 'Oswald', sans-serif; 
+            font-size: 1.2rem; 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            margin-top: 10px; 
+            width: 100%;
+            border: 3px solid var(--platz-black);
+            transition: background 0.2s;
+        }
+        button[type="submit"]:hover { background: #333; }
+
+        /* Lista oglasa unutar admina */
+        .oglas-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #eee;
+            padding: 12px 0;
+            gap: 10px;
+        }
+        .oglas-item:last-child { border-bottom: none; }
+        .oglas-info { font-size: 0.95rem; }
+        .oglas-actions { display: flex; gap: 8px; flex-shrink: 0; }
+        
+        .btn-pogledaj { 
+            background: var(--platz-black); 
+            color: var(--platz-yellow); 
+            padding: 6px 10px; 
+            font-size: 0.8rem; 
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            text-decoration: none; 
+            border: 2px solid var(--platz-black);
+        }
+        .btn-obrisi { 
+            background: #ff3333; 
+            color: white; 
+            padding: 6px 10px; 
+            font-size: 0.8rem; 
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            text-decoration: none; 
+            border: 2px solid var(--platz-black);
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-wrapper">
+        <!-- Sekcija za dodavanje oglasa -->
+        <div class="admin-container">
+            <div class="top-bar">
+                <h1>Admin Panel</h1>
+                <a href="/admin/logout">Odjavi se</a>
+            </div>
+
+            <form method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label>Naziv automobila:</label>
+                    <input type="text" name="naziv" placeholder="npr. Porsche 911 Carrera" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Godište:</label>
+                        <input type="text" name="godiste" placeholder="npr. 2019" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Kilometraža:</label>
+                        <input type="text" name="kilometraza" placeholder="npr. 45.000 km" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Kubikaža:</label>
+                        <input type="text" name="kubikaza" placeholder="npr. 3.0 cm3 ili 2.0 TDI">
+                    </div>
+                    <div class="form-group">
+                        <label>Gorivo / Motor:</label>
+                        <input type="text" name="gorivo" placeholder="npr. Benzin / Dizel">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Konjske Snage (KS):</label>
+                        <input type="text" name="konjske_snage" placeholder="npr. 331 kW / 450 KS">
+                    </div>
+                    <div class="form-group">
+                        <label>Mjenjač:</label>
+                        <input type="text" name="mjenjac" placeholder="npr. Automatik / Manuelni">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Cijena:</label>
+                    <input type="text" name="cijena" placeholder="npr. 95.000 €" required>
+                </div>
+
+		<div class="form-group">
+    <label>Kontakt telefon:</label>
+    <input type="text" name="telefon" placeholder="npr. +382 67 000 000" required>
+</div>
+
+                <div class="form-group">
+                    <label>Glavna (naslovna) slika:</label>
+                    <input type="file" name="naslovna_slika" accept="image/*" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Dodatne slike (za galeriju):</label>
+                    <input type="file" name="dodatne_slike" accept="image/*" multiple>
+                </div>
+
+                <div class="form-group">
+                    <label>Detaljni opis automobila:</label>
+                    <textarea name="detaljni_opis" placeholder="Unesite opširniji opis, opremu, stanje vozila..."></textarea>
+                </div>
+
+                <button type="submit">Dodaj oglas</button>
+            </form>
+        </div>
+
+        <!-- Sekcija za aktivne oglase -->
+        <div class="admin-container" id="admin-lista">
+            <h2>Aktivni oglasi</h2>
+            <div id="lista-oglasa-admin">Učitavanje...</div>
+        </div>
+    </div>
+
+    <script>
+        async function ucitajAdminOglase() {
+            try {
+                const res = await fetch('/api/oglasi');
+                const oglasi = await res.json();
+                const div = document.getElementById('lista-oglasa-admin');
+                div.innerHTML = '';
+                
+                if(oglasi.length === 0) {
+                    div.innerHTML = '<p style="font-weight: 600; color: #555;">Nema aktivnih oglasa.</p>';
+                    return;
+                }
+
+                oglasi.forEach(a => {
+                    div.innerHTML += `
+                        <div class="oglas-item">
+                            <div class="oglas-info">
+                                <strong>${a.naziv}</strong><br>
+                                <span style="color: #666; font-size: 0.85rem;">${a.cijena}</span>
+                            </div>
+                            <div class="oglas-actions">
+                                <a href="/oglas/${a.id}" target="_blank" class="btn-pogledaj">Pogledaj</a>
+                                <a href="/admin/obrisi/${a.id}" onclick="return confirm('Da li si siguran da želiš da obrišeš ovaj oglas?')" class="btn-obrisi">Obriši</a>
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch (err) {
+                document.getElementById('lista-oglasa-admin').innerHTML = '<p style="color: red;">Greška pri učitavanju oglasa.</p>';
+            }
+        }
+        ucitajAdminOglase();
+    </script>
+</body>
+</html>

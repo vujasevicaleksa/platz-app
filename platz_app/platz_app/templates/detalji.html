@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ auto.naziv }} | PLATZ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Montserrat:wght@600;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --platz-yellow: #f8e110; --platz-black: #000000; --pure-white: #ffffff; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            background-color: var(--platz-yellow); 
+            color: var(--platz-black); 
+            font-family: 'Montserrat', sans-serif; 
+            padding: 20px 10px; 
+        }
+
+        .wrapper { 
+            max-width: 900px; 
+            margin: 0 auto; 
+            background: var(--pure-white); 
+            border: 4px solid var(--platz-black); 
+            box-shadow: 6px 6px 0px var(--platz-black); 
+            padding: 20px; 
+        }
+
+        @media (min-width: 768px) {
+            body { padding: 40px 20px; }
+            .wrapper { border: 6px solid var(--platz-black); box-shadow: 12px 12px 0px var(--platz-black); padding: 40px; }
+        }
+
+        .back-btn { 
+            display: inline-block; 
+            background: var(--platz-black); 
+            color: var(--platz-yellow); 
+            font-family: 'Oswald', sans-serif; 
+            text-decoration: none; 
+            padding: 8px 16px; 
+            text-transform: uppercase; 
+            border: 2px solid var(--platz-black);
+            font-size: 0.9rem;
+        }
+        .back-btn:hover { background: var(--platz-yellow); color: var(--platz-black); }
+
+        h1 { 
+            font-family: 'Oswald', sans-serif; 
+            font-size: 2.2rem; 
+            text-transform: uppercase; 
+            margin: 15px 0 10px 0; 
+            line-height: 1.1;
+        }
+        @media (min-width: 768px) { h1 { font-size: 3rem; } }
+
+        .price-tag { 
+            font-family: 'Oswald', sans-serif; 
+            font-size: 2rem; 
+            background: var(--platz-yellow); 
+            padding: 6px 15px; 
+            display: inline-block; 
+            border: 3px solid var(--platz-black); 
+            margin-bottom: 20px; 
+        }
+        @media (min-width: 768px) { .price-tag { font-size: 2.5rem; } }
+
+        /* OPTIMIZOVANA NASLOVNA SLIKA ZA TELEFON */
+        .main-img-container {
+            width: 100%;
+            background: #000;
+            border: 3px solid var(--platz-black);
+            margin-bottom: 25px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .main-img { 
+            width: 100%; 
+            max-height: 320px; 
+            object-fit: cover; 
+            cursor: pointer; 
+            display: block;
+            transition: transform 0.3s ease;
+        }
+        @media (min-width: 768px) {
+            .main-img { max-height: 450px; }
+        }
+        .main-img:hover { transform: scale(1.02); }
+
+        /* ODVOJENI PROZORI (KARTICE) ZA SPECIFIKACIJE */
+        .specs-grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 12px; 
+            margin-bottom: 30px; 
+        }
+        @media (min-width: 600px) { 
+            .specs-grid { grid-template-columns: repeat(3, 1fr); gap: 15px; } 
+        }
+
+        .spec-box {
+            background: #fdfdfd;
+            border: 3px solid var(--platz-black);
+            padding: 12px 10px;
+            text-align: center;
+            box-shadow: 3px 3px 0px var(--platz-black);
+        }
+        .spec-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 900;
+            color: #666;
+            margin-bottom: 4px;
+        }
+        .spec-value {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.2rem;
+            color: var(--platz-black);
+        }
+
+        .description-box { 
+            font-size: 1rem; 
+            line-height: 1.5; 
+            margin-bottom: 35px; 
+            white-space: pre-line; 
+            background: #f9f9f9;
+            padding: 15px;
+            border: 3px solid var(--platz-black);
+        }
+        .description-box h3 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .gallery-title { 
+            font-family: 'Oswald', sans-serif; 
+            font-size: 1.6rem; 
+            text-transform: uppercase; 
+            margin-bottom: 15px; 
+            border-bottom: 3px solid var(--platz-black); 
+            padding-bottom: 8px; 
+        }
+        
+        .gallery-grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 12px; 
+        }
+        @media (min-width: 600px) {
+            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; }
+        }
+
+        .gallery-img { 
+            width: 100%; 
+            height: 140px; 
+            object-fit: cover; 
+            border: 3px solid var(--platz-black); 
+            cursor: pointer; 
+            transition: transform 0.2s; 
+        }
+        @media (min-width: 768px) { .gallery-img { height: 180px; } }
+        .gallery-img:hover { transform: scale(1.03); }
+
+        /* MODAL ZA PREKO CIJELOG EKRANA */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 10px;
+        }
+        .modal img {
+            max-width: 100%;
+            max-height: 85vh;
+            border: 3px solid var(--platz-yellow);
+        }
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: var(--platz-yellow);
+            font-size: 2.5rem;
+            font-family: 'Oswald', sans-serif;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <a href="/" class="back-btn">&larr; Nazad</a>
+        </div>
+
+        <h1>{{ auto.naziv }}</h1>
+        <div class="price-tag">{{ auto.cijena }}</div>
+
+	<!-- Dodaj ovo odmah ispod div-a sa klasom .price-tag -->
+<div style="margin-bottom: 20px;">
+    <a href="tel:{{ auto.telefon }}" style="display: inline-block; background: var(--platz-black); color: var(--platz-yellow); padding: 12px 25px; font-family: 'Oswald', sans-serif; text-decoration: none; font-size: 1.2rem; border: 3px solid var(--platz-black);">
+        POZOVI: {{ auto.telefon }}
+    </a>
+</div>
+	
+        
+        <!-- Optimizovana glavna slika -->
+        <div class="main-img-container">
+            <img src="/{{ auto.naslovna_slika }}" alt="{{ auto.naziv }}" class="main-img" onclick="otvoriSliku(this.src)">
+        </div>
+        
+        <!-- Nove odvojene kartice za specifikacije -->
+        <div class="specs-grid">
+            <div class="spec-box">
+                <div class="spec-title">Godište</div>
+                <div class="spec-value">{{ auto.godiste }}</div>
+            </div>
+            <div class="spec-box">
+                <div class="spec-title">Kilometraža</div>
+                <div class="spec-value">{{ auto.kilometraza }}</div>
+            </div>
+            <div class="spec-box">
+                <div class="spec-title">Kubikaža</div>
+                <div class="spec-value">{% if auto.kubikaza %}{{ auto.kubikaza }}{% else %}N/D{% endif %}</div>
+            </div>
+            <div class="spec-box">
+                <div class="spec-title">Gorivo</div>
+                <div class="spec-value">{% if auto.gorivo %}{{ auto.gorivo }}{% else %}{{ auto.motor }}{% endif %}</div>
+            </div>
+            <div class="spec-box">
+                <div class="spec-title">Konjske Snage</div>
+                <div class="spec-value">{% if auto.konjske_snage %}{{ auto.konjske_snage }} KS{% else %}N/D{% endif %}</div>
+            </div>
+            <div class="spec-box">
+                <div class="spec-title">Mjenjač</div>
+                <div class="spec-value">{% if auto.mjenjac %}{{ auto.mjenjac }}{% else %}Manuelni{% endif %}</div>
+            </div>
+        </div>
+
+        {% if auto.detaljni_opis %}
+        <div class="description-box">
+            <h3>Detaljan opis</h3>
+            <p>{{ auto.detaljni_opis }}</p>
+        </div>
+        {% endif %}
+
+        {% if slike %}
+        <div class="gallery-section">
+            <h2 class="gallery-title">Galerija slika</h2>
+            <div class="gallery-grid">
+                {% for slika in slike %}
+                <img src="/{{ slika }}" alt="Slika automobila" class="gallery-img" onclick="otvoriSliku(this.src)">
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- MODAL ZA UVELIČAVANJE -->
+    <div id="imageModal" class="modal" onclick="zatvoriSliku()">
+        <button class="close-modal">&times;</button>
+        <img id="modalImg" src="">
+    </div>
+
+    <script>
+        function otvoriSliku(src) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImg');
+            modal.style.display = 'flex';
+            modalImg.src = src;
+        }
+
+        function zatvoriSliku() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
